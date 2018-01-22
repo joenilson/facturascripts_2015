@@ -38,12 +38,12 @@
                <span class="glyphicon glyphicon-refresh"></span>
             </a>
             {if="$fsc->page->is_default()"}
-            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="desmarcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
+            <a class="btn btn-sm btn-default active" href="{$fsc->url()}&amp;default_page=FALSE" title="Marcada como página de inicio (pulsa de nuevo para desmarcar)">
+               <i class="fa fa-bookmark" aria-hidden="true"></i>
             </a>
             {else}
-            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="marcar como página de inicio">
-               <span class="glyphicon glyphicon-home"></span>
+            <a class="btn btn-sm btn-default" href="{$fsc->url()}&amp;default_page=TRUE" title="Marcar como página de inicio">
+               <i class="fa fa-bookmark-o" aria-hidden="true"></i>
             </a>
             {/if}
          </div>
@@ -118,6 +118,7 @@
                      <th class="text-left">Nick</th>
                      <th class="text-left">Email</th>
                      <th class="text-left">Empleado</th>
+                     <th class="text-center">Activado</th>                     
                      <th class="text-center">Administrador</th>
                      <th class="text-left">IP</th>
                      <th class="text-left">Página de inicio</th>
@@ -129,6 +130,9 @@
                   <td><a href="{$value->url()}">{$value->nick}</a></td>
                   <td>{if="FS_DEMO"}XXX@XXX.com{else}{$value->email}{/if}</td>
                   <td>{$value->get_agente_fullname()}</td>
+                  <td class="text-center">
+                     {if="$value->enabled"}<span class="glyphicon glyphicon-ok"></span>{else}<span class="glyphicon glyphicon-lock"></span>{/if}
+                  </td>                  
                   <td class="text-center">
                      {if="$value->admin"}<span class="glyphicon glyphicon-ok"></span>{/if}
                   </td>

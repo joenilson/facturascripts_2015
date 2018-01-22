@@ -26,5 +26,5 @@ require_once 'model/core/fs_user.php';
  */
 class fs_user extends FacturaScripts\model\fs_user
 {
-   
+    
 }

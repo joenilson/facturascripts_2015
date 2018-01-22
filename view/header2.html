@@ -6,18 +6,25 @@
    <meta name="description" content="FacturaScripts es un software de facturación y contabilidad para pymes. Es software libre bajo licencia GNU/LGPL." />
    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
    <meta name="generator" content="FacturaScripts" />
+   {if="file_exists('images/favicon.ico')"}
+   <link rel="shortcut icon" href="{#FS_PATH#}images/favicon.ico" />
+   {else}
    <link rel="shortcut icon" href="{#FS_PATH#}view/img/favicon.ico" />
+   {/if}
    <link rel="stylesheet" href="{#FS_PATH#}{$fsc->user->css}" />
    <link rel="stylesheet" href="{#FS_PATH#}view/css/font-awesome.min.css" />
    <link rel="stylesheet" href="{#FS_PATH#}view/css/datepicker.css" />
-   <link rel="stylesheet" href="{#FS_PATH#}view/css/custom.css" />
+   <link rel="stylesheet" href="{#FS_PATH#}view/css/custom.css?updated={$fsc->today()}" />
    <script type="text/javascript" src="{#FS_PATH#}view/js/jquery.min.js"></script>
    <script type="text/javascript" src="{#FS_PATH#}view/js/bootstrap.min.js"></script>
    <script type="text/javascript" src="{#FS_PATH#}view/js/bootstrap-datepicker.js" charset="UTF-8"></script>
    <script type="text/javascript" src="{#FS_PATH#}view/js/jquery.autocomplete.min.js"></script>
    <script type="text/javascript" src="{#FS_PATH#}view/js/jquery-ui.min.js"></script>
-   <script type="text/javascript" src="{#FS_PATH#}view/js/base.js?updated=2016.25"></script>
+   <script type="text/javascript" src="{#FS_PATH#}view/js/bootbox.min.js"></script>
+   <script type="text/javascript" src="{$fsc->get_js_location('base.js')}"></script>
    <script type="text/javascript">
+      bootbox.setLocale("es");
+      
       function show_precio(precio, coddivisa)
       {
          coddivisa || ( coddivisa = '{$fsc->empresa->coddivisa}' );
@@ -46,17 +53,26 @@
 </head>
 <body>
    {if="$fsc->get_errors()"}
-   <div class="alert alert-danger hidden-print">
+   <div class="alert alert-danger alert-dismissible hidden-print" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+      </button>
       <ul>{loop="$fsc->get_errors()"}<li>{$value}</li>{/loop}</ul>
    </div>
    {/if}
    {if="$fsc->get_messages()"}
-   <div class="alert alert-success hidden-print">
+   <div class="alert alert-success alert-dismissible hidden-print" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+      </button>
       <ul>{loop="$fsc->get_messages()"}<li>{$value}</li>{/loop}</ul>
    </div>
    {/if}
    {if="$fsc->get_advices()"}
-   <div class="alert alert-info hidden-print">
+   <div class="alert alert-info alert-dismissible hidden-print" role="alert">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true">&times;</span>
+      </button>
       <ul>{loop="$fsc->get_advices()"}<li>{$value}</li>{/loop}</ul>
    </div>
    {/if}

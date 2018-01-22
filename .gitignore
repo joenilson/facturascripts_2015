@@ -3,5 +3,7 @@
 /plugins/
 /doc/
 /tmp/
+/vendor/
 .DS_Store
-/extras/phpmailer/nbproject/private/
+.htaccess
+config.php
