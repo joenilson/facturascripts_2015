@@ -1,7 +1,7 @@
 <?php
-/*
+/**
  * This file is part of FacturaScripts
- * Copyright (C) 2013-2017  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2013-2017 Carlos Garcia Gomez <neorazorx@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 require_once 'extras/phpmailer/class.phpmailer.php';
 require_once 'extras/phpmailer/class.smtp.php';
 
@@ -102,7 +101,7 @@ class admin_empresa extends fs_controller
                             . '<a href="https://support.google.com/accounts/answer/185833?hl=es" '
                             . 'target="_blank">contraseña de aplicación</a>');
                     } else {
-                        $this->new_error_msg("¿<a href='https://www.facturascripts.com/comm3/index.php?page=community_item&id=74'"
+                        $this->new_error_msg("¿<a href='" . FS_COMMUNITY_URL . "/contacto'"
                             . " target='_blank'>Necesitas ayuda</a>?");
                     }
                 }

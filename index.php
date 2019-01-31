@@ -1,7 +1,7 @@
 <?php
-/*
+/**
  * This file is part of FacturaScripts
- * Copyright (C) 2013-2017  Carlos Garcia Gomez  neorazorx@gmail.com
+ * Copyright (C) 2013-2018 Carlos Garcia Gomez <neorazorx@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -10,15 +10,12 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU Lesser General Public License for more details.
  * 
  * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-
-/// Si estas leyendo esto es porque no tienes PHP instalado !!!!!!!!!!!!!!!!!!!!
-
 if ((float) substr(phpversion(), 0, 3) < 5.4) {
     /// comprobamos la versión de PHP
     die('FacturaScripts necesita PHP 5.4 o superior, y usted tiene PHP ' . phpversion());
@@ -30,10 +27,17 @@ if (!file_exists('config.php')) {
     die('Redireccionando al instalador...');
 }
 
+define('FS_FOLDER', __DIR__);
+
+/// ampliamos el límite de ejecución de PHP a 5 minutos
+@set_time_limit(300);
+
 /// cargamos las constantes de configuración
 require_once 'config.php';
 require_once 'base/config2.php';
 require_once 'base/fs_controller.php';
+require_once 'base/fs_edit_controller.php';
+require_once 'base/fs_list_controller.php';
 require_once 'base/fs_log_manager.php';
 require_once 'raintpl/rain.tpl.class.php';
 
@@ -52,55 +56,36 @@ if (filter_input(INPUT_GET, 'page')) {
 }
 
 $fsc_error = FALSE;
-if ($pagename != '') {
-    /// primero buscamos en los plugins
-    $found = FALSE;
-    foreach ($GLOBALS['plugins'] as $plugin) {
-        if (file_exists('plugins/' . $plugin . '/controller/' . $pagename . '.php')) {
-            require_once 'plugins/' . $plugin . '/controller/' . $pagename . '.php';
+if ($pagename == '') {
+    $fsc = new fs_controller();
+} else {
+    $class_path = find_controller($pagename);
+    require_once $class_path;
 
-            try {
-                $fsc = new $pagename();
-            } catch (Exception $e) {
-                echo "<h1>Error fatal</h1>"
-                . "<ul>"
-                . "<li><b>Código:</b> " . $e->getCode() . "</li>"
-                . "<li><b>Mensage:</b> " . $e->getMessage() . "</li>"
-                . "</ul>";
-                $fsc_error = TRUE;
-            }
-
-            $found = TRUE;
-            break;
-        }
-    }
-
-    /// si no está en los plugins, buscamos en controller/
-    if (!$found) {
-        if (file_exists('controller/' . $pagename . '.php')) {
-            require_once 'controller/' . $pagename . '.php';
-
-            try {
-                $fsc = new $pagename();
-            } catch (Exception $e) {
-                echo "<h1>Error fatal</h1>"
-                . "<ul>"
-                . "<li><b>Código:</b> " . $e->getCode() . "</li>"
-                . "<li><b>Mensage:</b> " . $e->getMessage() . "</li>"
-                . "</ul>";
-                $fsc_error = TRUE;
-            }
-        } else {
+    try {
+        /// ¿No se ha encontrado el controlador?
+        if ('base/fs_controller.php' === $class_path) {
             header("HTTP/1.0 404 Not Found");
             $fsc = new fs_controller();
+        } else {
+            $fsc = new $pagename();
         }
+    } catch (Exception $exc) {
+        echo "<h1>Error fatal</h1>"
+        . "<ul>"
+        . "<li><b>Código:</b> " . $exc->getCode() . "</li>"
+        . "<li><b>Mensage:</b> " . $exc->getMessage() . "</li>"
+        . "</ul>";
+        $fsc_error = TRUE;
     }
-} else {
-    $fsc = new fs_controller();
 }
 
+/// guardamos los errores en el log
+$log_manager = new fs_log_manager();
+$log_manager->save();
+
+/// redireccionamos a la página definida por el usuario
 if (is_null(filter_input(INPUT_GET, 'page'))) {
-    /// redireccionamos a la página definida por el usuario
     $fsc->select_default_page();
 }
 
@@ -139,8 +124,7 @@ if ($fsc->template) {
     $tpl->draw($fsc->template);
 }
 
-/// guardamos los errores en el log
-$log_manager = new fs_log_manager();
+/// guardamos los errores en el log (los producidos durante la carga del template)
 $log_manager->save();
 
 /// cerramos las conexiones

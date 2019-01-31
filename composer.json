@@ -8,12 +8,13 @@
         }
     ],
     "require": {
-        "phpmailer/phpmailer": "dev-master",
-        "components/jquery": "dev-master",
-        "components/font-awesome": "dev-master",
-        "mk-j/php_xlsxwriter": "dev-master",
-        "twbs/bootstrap": "dev-master",
-        "thomaspark/bootswatch": "v4.x-dev",
-        "makeusabrew/bootbox": "dev-master"
+        "php": ">=5.4",
+        "phpmailer/phpmailer": "v5.*",
+        "components/jquery": "v3.*",
+        "components/font-awesome": "v4.*",
+        "mk-j/php_xlsxwriter": "v0.37",
+        "twbs/bootstrap": "v3.*",
+        "thomaspark/bootswatch": "v3.*",
+        "makeusabrew/bootbox": "v4.x-dev"
     }
 }
